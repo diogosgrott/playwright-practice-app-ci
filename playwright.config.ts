@@ -7,6 +7,8 @@ export default defineConfig<TestOptions>({
   fullyParallel: true,
   retries: 1,
   reporter: [
+    process.env.CI ? ["dot"] : ["list"],
+    ["@argos-ci/playwright/reporter", { uploadToArgos: !!process.env.CI, },],
     ['json', { outputFile: 'test-results/jsonReport.json' }],
     ['junit', { outputFile: 'test-results/junitReport.xml' }],
     ['html']
@@ -19,6 +21,7 @@ export default defineConfig<TestOptions>({
         : 'http://localhost:4200',
 
     trace: 'on-first-retry',
+    screenshot: "only-on-failure",
     video: {
       mode: 'off',
       size: { width: 1920, height: 1080 }
